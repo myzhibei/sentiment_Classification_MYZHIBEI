@@ -2,7 +2,7 @@
 Author: myzhibei myzhibei@qq.com
 Date: 2023-06-19 13:23:51
 LastEditors: myzhibei myzhibei@qq.com
-LastEditTime: 2023-06-19 14:24:57
+LastEditTime: 2023-06-29 23:52:46
 FilePath: \评论情感分类\sentimentClassification\sentimentClassification_pth_re.py
 Description: 
 
@@ -51,8 +51,6 @@ class Config(object):
 
 
 # 简繁转换 并构建词汇表
-
-
 def build_word_dict(train_path):
     words = []
     max_len = 0
@@ -134,7 +132,6 @@ class SentimentModel(nn.Module):
         super(SentimentModel, self).__init__()
         self.hidden_dim = hidden_dim
         self.embeddings = nn.Embedding.from_pretrained(pre_weight)
-        # requires_grad指定是否在训练过程中对词向量的权重进行微调
         self.embeddings.weight.requires_grad = True
         self.lstm = nn.LSTM(embedding_dim, self.hidden_dim, num_layers=Config.LSTM_layers,
                             batch_first=True, dropout=Config.drop_prob, bidirectional=False)
@@ -223,8 +220,6 @@ class ConfuseMeter(object):
         self.F1 = 2 * self.pre*self.rec / (self.pre + self.rec)
 
 # topk的准确率计算
-
-
 def accuracy(output, label, topk=(1,)):
     maxk = max(topk)
     batch_size = label.size(0)
